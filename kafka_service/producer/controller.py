@@ -37,7 +37,6 @@ class ProducerController:
                     print("Erro no serviço do kafka >" + str(e))
             except Exception as e:
                 print("Erro ao consultar api", str(e))
-                raise
             time.sleep(self.config.sleep)
             
      
