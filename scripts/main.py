@@ -19,8 +19,8 @@ banco_nuvem = connection(ClientData(
 banco_local = connection(ClientData(
     username="root",
     password="7890380",
-    host="localhost",
-    port=27017,
+    host="192.168.1.10",
+    port=27018,
     auth_db="admin"
 ))
 

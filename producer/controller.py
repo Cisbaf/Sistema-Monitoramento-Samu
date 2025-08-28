@@ -25,7 +25,6 @@ class ProducerController:
                     timeout_conn=int(self.config.timeout_conn),
                     timeout_read=int(self.config.timeout_read)
                 )
-                print(request_sso)
                 try:
                     self.kafka.send(self.config.topic_sso_data, request_sso.text)
                 except Exception as e:

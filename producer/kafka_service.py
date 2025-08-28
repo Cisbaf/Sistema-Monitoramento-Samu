@@ -48,9 +48,7 @@ class CachedKafkaProducer:
                 topic, value, key = self.queue[0]
 
             try:
-                print(topic)
                 future = self.producer.send(topic, value=value, key=key)
-                print(future)
                 future.get(timeout=3)  # Aumente conforme necessário
                 # Remove da fila após sucesso
                 with self.lock:
