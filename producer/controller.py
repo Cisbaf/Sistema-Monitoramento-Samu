@@ -4,6 +4,8 @@ from api_sso import queryApiData
 from kafka_service import CachedKafkaProducer
 import time
 from typing import Optional
+import xmltodict
+
 
 class ProducerConfig(BaseModel):
     api_sso_url: str
@@ -25,13 +27,15 @@ class ProducerController:
                     timeout_conn=int(self.config.timeout_conn),
                     timeout_read=int(self.config.timeout_read)
                 )
+                dict_data = xmltodict.parse(request_sso.text)
+                json_data = dict_data.get("system", {}).get("status_agente", [])
                 try:
-                    self.kafka.send(self.config.topic_sso_data, request_sso.text)
+                    self.kafka.send(self.config.topic_sso_data, json_data)
                 except Exception as e:
                     print("Erro no serviço do kafka >" + str(e))
             except Exception as e:
                 print("Erro ao consultar api", str(e))
-
+                raise
             time.sleep(self.config.sleep)
             
      
