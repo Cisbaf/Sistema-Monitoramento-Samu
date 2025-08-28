@@ -25,18 +25,18 @@ banco_local = connection(ClientData(
 ))
 
 # Mede o tempo da cópia do banco
-inicio_copia = datetime.now()
-copiar_database(banco_nuvem, banco_local, nome_db="status_agent")
-fim_copia = datetime.now()
-tempo_copia = fim_copia - inicio_copia
-print(f"Tempo de copiar_database: {tempo_copia} (ou {tempo_copia.total_seconds()}s)")
+# inicio_copia = datetime.now()
+# copiar_database(banco_nuvem, banco_local, nome_db="status_agent")
+# fim_copia = datetime.now()
+# tempo_copia = fim_copia - inicio_copia
+# print(f"Tempo de copiar_database: {tempo_copia} (ou {tempo_copia.total_seconds()}s)")
 
-# # Mede o tempo da conversão de datas
-# inicio_converter = datetime.now()
-# converter_datas(banco_local)
-# fim_converter = datetime.now()
-# tempo_converter = fim_converter - inicio_converter
-# print(f"Tempo de converter_datas: {tempo_converter} (ou {tempo_converter.total_seconds()}s)")
+# Mede o tempo da conversão de datas
+inicio_converter = datetime.now()
+converter_datas(banco_local)
+fim_converter = datetime.now()
+tempo_converter = fim_converter - inicio_converter
+print(f"Tempo de converter_datas: {tempo_converter} (ou {tempo_converter.total_seconds()}s)")
 
 # # Marca o tempo final total
 # fim_total = datetime.now()

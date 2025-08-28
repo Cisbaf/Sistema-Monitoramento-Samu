@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from pydantic import BaseModel
 from api_sso import queryApiData
-from kafka_service import CachedKafkaProducer
+from kafka_service.utils.producer import CachedKafkaProducer
 import time
 from typing import Optional
 import xmltodict
+from kafka_service.utils.agents import filter_agents
 
 
 class ProducerConfig(BaseModel):
@@ -29,8 +30,9 @@ class ProducerController:
                 )
                 dict_data = xmltodict.parse(request_sso.text)
                 json_data = dict_data.get("system", {}).get("status_agente", [])
+                json_filtered = filter_agents(json_data)
                 try:
-                    self.kafka.send(self.config.topic_sso_data, json_data)
+                    self.kafka.send(self.config.topic_sso_data, json_filtered)
                 except Exception as e:
                     print("Erro no serviço do kafka >" + str(e))
             except Exception as e:

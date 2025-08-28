@@ -31,6 +31,7 @@ AGENTES_PRIORITARIOS = [
   "213874658724"
 ]
 
+
 def copiar_lote(colecao_origem, colecao_destino, skip, limit):
     documentos = list(colecao_origem.find({}).skip(skip).limit(limit))
     if documentos:

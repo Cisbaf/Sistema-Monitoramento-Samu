@@ -1,7 +1,6 @@
-from api_sso import queryApiData
-from env import get_envs
+# KAFKA PRODUCER
+from kafka_service.utils.env import get_envs
 from controller import ProducerController, ProducerConfig, CachedKafkaProducer
-
 
 (
 api_sso_url,
