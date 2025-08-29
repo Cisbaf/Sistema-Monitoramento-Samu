@@ -1,42 +1,46 @@
 from datetime import datetime
 
+from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor
+from pymongo import MongoClient, UpdateOne
+
 
 def converter_datas(client):
-    # Novo formato da string de data e hora
     date_format = "%d/%m/%Y, %H:%M:%S"
-
-    # Campos que você deseja converter
     campos_para_converter = ["date_status_dt", "last_date_dt"]
-
-    # Bancos internos que devem ser ignorados
     ignored_dbs = {"admin", "local", "config"}
 
-    # Iterar por todos os bancos
+    def process_collection(db_name, collection_name):
+        db = client[db_name]
+        collection = db[collection_name]
+
+        bulk_ops = []
+
+        for campo in campos_para_converter:
+            filtro = {campo: {"$type": "string"}}
+            for doc in collection.find(filtro):
+                valor = doc.get(campo)
+                try:
+                    data_convertida = datetime.strptime(valor, date_format)
+                    bulk_ops.append(
+                        UpdateOne({"_id": doc["_id"]}, {"$set": {campo: data_convertida}})
+                    )
+                except Exception as e:
+                    print(f"⚠️ Erro {db_name}/{collection_name} campo '{campo}' _id={doc['_id']}: {e}")
+
+        if bulk_ops:
+            result = collection.bulk_write(bulk_ops)
+            print(f"✅ Atualizados {result.modified_count} documentos em {db_name}/{collection_name}")
+
+    # Criar lista de tarefas (coleções)
+    tasks = []
     for db_name in client.list_database_names():
         if db_name in ignored_dbs:
             continue
-        
-        print(db_name)
         db = client[db_name]
-        print(f"\n📁 Banco: {db_name}")
-
         for collection_name in db.list_collection_names():
-            collection = db[collection_name]
-            print(f"  📂 Coleção: {collection_name}")
+            tasks.append((db_name, collection_name))
 
-            for campo in campos_para_converter:
-                # Filtrar documentos que têm o campo como string
-                filtro = {campo: {"$type": "string"}}
-
-                for doc in collection.find(filtro):
-                    valor = doc.get(campo)
-                    try:
-                        data_convertida = datetime.strptime(valor, date_format)
-
-                        # Atualiza o campo com datetime
-                        collection.update_one(
-                            {"_id": doc["_id"]},
-                            {"$set": {campo: data_convertida}}
-                        )
-                    except Exception as e:
-                        print(f"    ⚠️ Erro no campo '{campo}' (_id={doc['_id']}): {e}")
+    # Executar coleções em paralelo
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        executor.map(lambda args: process_collection(*args), tasks)

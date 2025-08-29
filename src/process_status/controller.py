@@ -1,11 +1,10 @@
 from dataclasses import dataclass
-from kafka_service.utils import consumer
+from src.kafka_service.consumer import KafkaConsumerService
 import time
-
 
 @dataclass
 class ProcessController:
-    consumer: consumer.KafkaConsumerService
+    consumer: KafkaConsumerService
     # producer: producer.CachedKafkaProducer
 
     def run(self):

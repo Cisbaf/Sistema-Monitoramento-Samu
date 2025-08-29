@@ -1,6 +1,7 @@
 # KAFKA PROCESS STATUS
 from controller import ProcessController
-from kafka_service.utils import env, consumer
+from src.utils.env import get_envs
+from src.kafka_service.consumer import KafkaConsumerService
 
 (
 api_sso_url,
@@ -8,7 +9,7 @@ uri_conn_kafka,
 topic_sso_data,
 timeout_conn,
 timeout_read 
-) = env.get_envs(
+) = get_envs(
     keys = [
         "URL_API_SSO",
         "KAFKA_URI",
@@ -19,7 +20,7 @@ timeout_read
 )
 
 controller = ProcessController(
-    consumer=consumer.KafkaConsumerService(
+    consumer=KafkaConsumerService(
         kafka_uri=uri_conn_kafka,
         topic=topic_sso_data, # consumer
         group_id="status_agent_consumer_group"

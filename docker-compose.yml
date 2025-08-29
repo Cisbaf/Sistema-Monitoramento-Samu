@@ -96,7 +96,7 @@ services:
   producer:
     build:
       context: .
-      dockerfile: kafka_service/producer/Dockerfile   # ou Dockerfile-prod se você tiver múltiplos
+      dockerfile: src/producer/Dockerfile   # ou Dockerfile-prod se você tiver múltiplos
     container_name: producer
     depends_on:
       - kafka
@@ -109,7 +109,7 @@ services:
   # process-status:
   #   build:
   #     context: .
-  #     dockerfile: kafka_service/process_status/Dockerfile   # ou Dockerfile-prod se você tiver múltiplos
+  #     dockerfile: src/process_status/Dockerfile   # ou Dockerfile-prod se você tiver múltiplos
   #   container_name: process_status
   #   depends_on:
   #     - kafka

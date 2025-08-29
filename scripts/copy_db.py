@@ -4,7 +4,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 # Configurações de paralelismo
 CHUNK_SIZE = 1000
 MAX_WORKERS_CHUNK = 2
-MAX_WORKERS_COLECOES = 4
+MAX_WORKERS_COLECOES = 8
 LIMITE_PESADO = 1000
 
 # Lista de agentes prioritários

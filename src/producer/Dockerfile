@@ -7,16 +7,18 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Copia apenas requirements para aproveitar cache
-COPY kafka_service/producer/requirements.txt .
+COPY src/producer/requirements.txt .
 
 # Instala dependências em um diretório isolado
 RUN python -m venv /opt/venv && \
     /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # Copia o restante do código
-COPY kafka_service/producer /app/
+COPY src/producer /app/
 
-COPY kafka_service/utils /app/kafka_service/utils
+COPY src/utils /app/src/utils
+COPY src/kafka_service /app/src/kafka_service
+
 
 # ===== Stage 2: Runtime =====
 FROM python:3.12-slim

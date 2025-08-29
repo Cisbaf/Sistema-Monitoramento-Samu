@@ -1,5 +1,5 @@
 # KAFKA PRODUCER
-from kafka_service.utils.env import get_envs
+from src.utils.env import get_envs
 from controller import ProducerController, ProducerConfig, CachedKafkaProducer
 
 (
